@@ -25,7 +25,7 @@ export function Sidebar({ onNewChat }: SidebarProps) {
     <div className="w-72 h-screen bg-gradient-sidebar flex flex-col shadow-medium">
       {/* Logo */}
       <div className="p-6 border-b border-sidebar-border-custom">
-        <img src={logo} alt="ATOS Capital Logo" width={150} onClick={() => { console.log("teste")}} />
+        <img src={logo} alt="ATOS Capital Logo" width={150} />
       </div>
 
       {/* Botao de chat */}
