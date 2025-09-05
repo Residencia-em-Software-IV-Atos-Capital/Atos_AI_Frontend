@@ -46,7 +46,7 @@
     --chat-bg: 210 17% 93%;
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(183 100% 32%), hsl(183 100% 28%));
+    --gradient-primary: linear-gradient(135deg, #700404, #4d0303);
     --gradient-sidebar: linear-gradient(180deg, #700404, #4d0303);
 
     
