@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PlusIcon, ClockIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/ThemeProvider';
+import logo from '../img/ATOSCAPITALBRANCO.png';
 
 interface SidebarProps {
   onNewChat: () => void;
@@ -24,7 +25,7 @@ export function Sidebar({ onNewChat }: SidebarProps) {
     <div className="w-72 h-screen bg-gradient-sidebar flex flex-col shadow-medium">
       {/* Logo */}
       <div className="p-6 border-b border-sidebar-border-custom">
-        <img src="/logo.png" alt="ATOS Capital Logo" className="w-auto h-10" />
+        <img src={logo} alt="ATOS Capital Logo" width={150} onClick={() => { console.log("teste")}} />
       </div>
 
       {/* Botao de chat */}

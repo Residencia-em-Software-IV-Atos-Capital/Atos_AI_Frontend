@@ -47,7 +47,8 @@
     
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(183 100% 32%), hsl(183 100% 28%));
-    --gradient-sidebar: linear-gradient(180deg, hsl(196 24% 24%), hsl(196 24% 20%));
+    --gradient-sidebar: linear-gradient(180deg, #700404, #4d0303);
+
     
     /* Shadows */
     --shadow-soft: 0 4px 6px -1px hsl(183 100% 32% / 0.1);
