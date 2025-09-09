@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import "./Login.css"; 
+import logo from "@/components/img/ATOSCAPITALBRANCO.png"; 
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -6,40 +8,36 @@ const Login: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Adicione aqui a lógica de autenticação
-    alert(`Email: ${email}\nSenha: ${password}`);
+    console.log("Email:", email);
+    console.log("Password:", password); 
+    // auth
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "40px auto", padding: 24, border: "1px solid #eee", borderRadius: 8 }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 16 }}>
-          <label htmlFor="email">Email:</label>
+    <div className="login-container">
+      <div className="login-left">
+        <img src={logo} alt="ATOS Capital" className="login-logo" />
+      </div>
+      <div className="login-right">
+        <form className="login-form" onSubmit={handleSubmit}>
+          <h2>Login</h2>
           <input
-            id="email"
-            type="email"
+            type="text"
+            placeholder="Usuário"
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            style={{ width: "100%", padding: 8, marginTop: 4 }}
           />
-        </div>
-        <div style={{ marginBottom: 16 }}>
-          <label htmlFor="password">Senha:</label>
           <input
-            id="password"
             type="password"
+            placeholder="Senha"
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
-            style={{ width: "100%", padding: 8, marginTop: 4 }}
           />
-        </div>
-        <button type="submit" style={{ width: "100%", padding: 10 }}>
-          Entrar
-        </button>
-      </form>
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
     </div>
   );
 };
