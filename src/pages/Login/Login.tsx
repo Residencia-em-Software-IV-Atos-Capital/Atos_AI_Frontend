@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { UserIcon, EyeIcon, EyeClosed } from 'lucide-react';
 import './style.css';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
@@ -20,7 +22,13 @@ const Login = () => {
     const handleSubmit = (e) => {
         // Implementar aqui a requisicao de login
         e.preventDefault();
-        console.log(formData);
+
+        try {
+            console.log(formData);
+            navigate("/");
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const handleShowPassword = () => {
