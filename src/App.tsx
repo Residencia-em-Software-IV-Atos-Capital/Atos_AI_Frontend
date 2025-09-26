@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login/Login";
+import Home from "./pages/Home/home";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/home" element={<Home />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
