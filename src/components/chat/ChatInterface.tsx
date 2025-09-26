@@ -77,16 +77,9 @@ export function ChatInterface({ userName = "Analista" }: ChatInterfaceProps) {
   return (
     // Contêiner principal, agora com flex-1 para ocupar o espaço horizontal restante
     <div className="flex-1 flex flex-col h-screen">
-      {/* Cabeçalho da interface - não muda de posição */}
-      <div className="p-6 border-b border-border bg-background flex-none">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Atos Chat AI</h1>
-          <p className="text-muted-foreground">Gere relatórios e visualizações com IA</p>
-        </div>
-      </div>
 
       {/* Área de mensagens - se expande para ocupar o espaço */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-6" style={{ display: 'flex', alignItems: 'center', justifyContent:'center' }}>
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8">
             <div className="max-w-2xl w-full space-y-8">
@@ -137,7 +130,7 @@ export function ChatInterface({ userName = "Analista" }: ChatInterfaceProps) {
       </div>
 
       {}
-      <div className="p-6 border-t border-border bg-background flex-none">
+      <div className="p-6 border-border bg-background flex-none">
         <div className="max-w-4xl mx-auto">
           <div className="flex gap-3 p-4 bg-card rounded-2xl border border-border shadow-soft">
             <Input
