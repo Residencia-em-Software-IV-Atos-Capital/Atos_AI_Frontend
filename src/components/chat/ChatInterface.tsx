@@ -10,9 +10,12 @@ interface Message {
   content: string;
   sender: "user" | "ai";
   timestamp: Date;
-  type?: "text" | "report";
+  type?: "text" | "report" | "chart";
+  data?: Record<string, unknown>[] | null;
+  visualization_type?: "line" | "bar" | "pie" | null;
+  x_axis?: string | null;
+  y_axis?: string | null;
 }
-
 interface ChatInterfaceProps {
   userName?: string;
 }
@@ -46,33 +49,47 @@ export function ChatInterface({ userName = "Analista" }: ChatInterfaceProps) {
     setIsLoading(true);
 
     try {
-      // Chama a API /analyze
       const analysis = await analyzeData(message);
+
+      const aiResponse = typeof analysis === "object" && analysis !== null
+        ? analysis as {
+          message: string;
+          data?: Record<string, unknown>[] | null;
+          visualization_type?: "line" | "bar" | "pie" | null;
+          x_axis?: string | null;
+          y_axis?: string | null;
+        }
+        : { message: String(analysis) };
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content:
-          typeof analysis === "string"
-            ? analysis
-            : JSON.stringify(analysis, null, 2),
+        content: aiResponse.message || "⚠️ Nenhuma resposta recebida.",
         sender: "ai",
         timestamp: new Date(),
+        type: aiResponse.visualization_type ? "chart" : "text",
+        data: aiResponse.data ?? null,
+        visualization_type: aiResponse.visualization_type ?? null,
+        x_axis: aiResponse.x_axis ?? null,
+        y_axis: aiResponse.y_axis ?? null,
       };
 
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
-      const errorMessage: Message = {
-        id: (Date.now() + 2).toString(),
-        content: "❌ Ocorreu um erro ao analisar sua solicitação.",
-        sender: "ai",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-      console.error(error);
+      console.error("Erro ao chamar API /analyze:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 2).toString(),
+          content: "❌ Ocorreu um erro ao analisar sua solicitação.",
+          sender: "ai",
+          timestamp: new Date(),
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   const handleGenerateReport = async () => {
     const lastUserMessage = [...messages]
@@ -89,7 +106,7 @@ export function ChatInterface({ userName = "Analista" }: ChatInterfaceProps) {
         id: (Date.now() + 3).toString(),
         content:
           report?.file_url
-            ? `📊 Relatório disponível: ${report.file_url}`
+            ? `📊 [Clique aqui para baixar o relatório CSV](${report.file_url})`
             : "📊 Relatório gerado com sucesso! (dados recebidos da API)",
         sender: "ai",
         timestamp: new Date(),
@@ -98,6 +115,7 @@ export function ChatInterface({ userName = "Analista" }: ChatInterfaceProps) {
 
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
+      console.error("Erro ao gerar relatório:", error);
       const errorMessage: Message = {
         id: (Date.now() + 4).toString(),
         content: "❌ Erro ao gerar o relatório CSV.",
@@ -105,11 +123,11 @@ export function ChatInterface({ userName = "Analista" }: ChatInterfaceProps) {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
-      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
