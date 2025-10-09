@@ -14,11 +14,12 @@ import {
   LabelList,
 } from "recharts";
 import { Card } from "@/components/ui/card";
+import { Download } from "lucide-react";
 
 interface MessageBubbleProps {
   message: {
     id: string;
-    content: string;
+    content: string; // pode ser texto ou CSV puro
     sender: "user" | "ai";
     label?: string;
     value?: string;
@@ -40,16 +41,36 @@ export function MessageBubble({ message }: MessageBubbleProps) {
     return found || key;
   };
 
+  const downloadCSV = (csvString: string, filename = "dados.csv") => {
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const parseCSV = (csv: string) => {
+    const [headerLine, ...lines] = csv.trim().split("\n");
+    const headers = headerLine.split(",");
+    const rows = lines.map((l) => l.split(","));
+    return { headers, rows };
+  };
+
+  const isCSV = (text: string) => {
+    const lines = text.trim().split("\n");
+    if (lines.length < 2) return false;
+    const headers = lines[0].split(",");
+    return headers.length > 1;
+  };
+
   const renderChart = () => {
     if (!message.data || !message.visualization_type) return null;
 
     const xKey = normalizeKey(message.x_axis, message.data);
     const yKey = normalizeKey(message.y_axis, message.data);
-
-    const labelKey = message.x_axis ?? message.label ?? "";
-    const valueKey = message.y_axis ?? message.value ?? "";
-
-    console.log("Mensagem renderizada: ", message);
 
     switch (message.visualization_type) {
       case "line":
@@ -141,24 +162,28 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           </PieChart>
         );
       }
+
       default:
         return null;
     }
   };
 
-  // Determina altura mínima e aumenta conforme quantidade de dados
+  // ---------- Layout ----------
   const chartHeight = message.data ? Math.max(300, message.data.length * 50) : 300;
+  const csvDetected = isCSV(message.content);
 
   return (
     <div className={`flex mb-4 ${isUser ? "justify-end" : "justify-start"}`}>
       <Card
         className={`p-4 rounded-2xl shadow-sm ${
-          isUser ? "bg-gradient-primary text-primary-foreground" : "bg-card border border-border text-foreground"
+          isUser
+            ? "bg-gradient-primary text-primary-foreground"
+            : "bg-card border border-border text-foreground"
         }`}
         style={{ width: "fit-content", maxWidth: "100%" }}
       >
         <div>
-          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+          {!csvDetected && <p className="text-sm whitespace-pre-wrap">{message.content}</p>}
 
           {message.type === "chart" && message.data && (
             <div
@@ -175,6 +200,48 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                   {renderChart()}
                 </ResponsiveContainer>
               </div>
+            </div>
+          )}
+
+          {/* CSV Detectado */}
+          {csvDetected && (
+            <div className="mt-4 space-y-2">
+              <div className="overflow-x-auto border rounded">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr>
+                      {parseCSV(message.content).headers.map((h, i) => (
+                        <th
+                          key={i}
+                          className="px-2 py-1 border-b bg-gray-100 text-left font-medium"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {parseCSV(message.content).rows.map((row, ri) => (
+                      <tr key={ri}>
+                        {row.map((cell, ci) => (
+                          <td key={ci} className="px-2 py-1 border-b">
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <button
+                onClick={() =>
+                  downloadCSV(message.content, `relatorio-${message.id}.csv`)
+                }
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-primary text-white rounded-lg shadow transition"
+              >
+                <Download className="w-4 h-4" /> Baixar
+              </button>
             </div>
           )}
         </div>
