@@ -15,6 +15,9 @@ interface Message {
   visualization_type?: "line" | "bar" | "pie" | null;
   x_axis?: string | null;
   y_axis?: string | null;
+  fileUrl?: string;
+  fileName?: string;
+  fileType?: "pdf" | "excel" | "csv";
 }
 interface ChatInterfaceProps {
   userName?: string;
@@ -60,6 +63,25 @@ export function ChatInterface({ userName = "Analista" }: ChatInterfaceProps) {
           y_axis?: string | null;
         }
         : { message: String(analysis) };
+
+      // --- Se for arquivo (PDF ou Excel) ---
+      if (analysis?.type === "pdf" || analysis?.type === "excel") {
+        const aiMessage: Message = {
+          id: (Date.now() + 10).toString(),
+          content: analysis.message, // apenas o texto “PDF gerado”
+          sender: "ai",
+          timestamp: new Date(),
+          type: "report",
+          fileUrl: analysis.fileUrl,
+          fileName: analysis.fileName,
+          fileType: analysis.type, // pdf ou excel
+        };
+        
+        setMessages((prev) => [...prev, aiMessage]);
+        setIsLoading(false);
+        return;
+      }
+
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),

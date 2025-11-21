@@ -28,6 +28,9 @@ interface MessageBubbleProps {
     visualization_type?: "line" | "bar" | "pie" | null;
     x_axis?: string | null;
     y_axis?: string | null;
+    fileUrl?: string;
+    fileName?: string;
+    fileType?: "pdf" | "excel" | "csv";
   };
 }
 
@@ -202,6 +205,17 @@ export function MessageBubble({ message }: MessageBubbleProps) {
               </div>
             </div>
           )}
+
+          {message.type === "report" && message.fileUrl && !csvDetected && (
+            <a
+              href={message.fileUrl}
+              download={message.fileName}
+              className="px-4 py-2 mt-2 inline-block bg-primary text-white rounded-lg hover:bg-primary/80 transition"
+            >
+              ⬇️ Baixar {message.fileType === "pdf" ? "PDF" : "Excel"}
+            </a>
+          )}
+
 
           {/* CSV Detectado */}
           {csvDetected && (
