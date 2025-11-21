@@ -28,53 +28,58 @@ export const analyzeData = async (userQuestion: string) => {
 
   const contentType = response.headers["content-type"] || "";
 
-// --- PDF ---
-if (contentType.includes("application/pdf")) {
-  const blob = new Blob([response.data], { type: "application/pdf" });
-  const fileUrl = URL.createObjectURL(blob);
-  const fileName = response.headers["x-filename"] || "relatorio.pdf";
+  // --- PDF ---
+  if (contentType.includes("application/pdf")) {
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const fileUrl = URL.createObjectURL(blob);
+    const fileName = response.headers["x-filename"] || "relatorio.pdf";
 
-  return {
-    type: "pdf",
-    message: "📄 PDF gerado.",
-    fileUrl,
-    fileName,
-  };
-}
+    return {
+      type: "pdf",
+      message: "📄 PDF gerado.",
+      fileUrl,
+      fileName,
+    };
+  }
 
-// --- EXCEL (XLSX) ---
-if (
-  contentType.includes(
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  )
-) {
-  const blob = new Blob([response.data], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  });
-  const fileUrl = URL.createObjectURL(blob);
-  const fileName = response.headers["x-filename"] || "relatorio.xlsx";
+  // --- EXCEL (XLSX) ---
+  if (
+    contentType.includes(
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+  ) {
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const fileUrl = URL.createObjectURL(blob);
+    const fileName = response.headers["x-filename"] || "relatorio.xlsx";
 
-  return {
-    type: "excel",
-    message: "📘 Excel gerado.",
-    fileUrl,
-    fileName,
-  };
-}
+    return {
+      type: "excel",
+      message: "📘 Excel gerado.",
+      fileUrl,
+      fileName,
+    };
+  }
 
-  // --- CSV (mantido exatamente como estava) ---
+  // --- CSV ---
   if (contentType.includes("text/csv")) {
-    const blob = new Blob([response.data], { type: "text/csv" });
+    const decoder = new TextDecoder("utf-8");
+    const csvText = decoder.decode(response.data);
+
+    // criar download
+    const blob = new Blob([csvText], { type: "text/csv" });
     const fileUrl = URL.createObjectURL(blob);
     const fileName = response.headers["x-filename"] || "relatorio.csv";
 
     return {
       type: "csv",
-      message: "📊 CSV gerado.",
+      message: csvText, // aqui vai texto puro, igual antes
       fileUrl,
       fileName,
     };
   }
+
 };
 
 
