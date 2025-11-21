@@ -210,9 +210,9 @@ export function MessageBubble({ message }: MessageBubbleProps) {
             <a
               href={message.fileUrl}
               download={message.fileName}
-              className="px-4 py-2 mt-2 inline-block bg-primary text-white rounded-lg hover:bg-primary/80 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-primary text-white rounded-lg shadow transition"
             >
-              ⬇️ Baixar {message.fileType === "pdf" ? "PDF" : "Excel"}
+              <Download className="w-4 h-4" /> Baixar {message.fileType === "pdf" ? "PDF" : "Excel"}
             </a>
           )}
 

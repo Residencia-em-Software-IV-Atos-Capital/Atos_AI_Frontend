@@ -36,7 +36,7 @@ export const analyzeData = async (userQuestion: string) => {
 
     return {
       type: "pdf",
-      message: "📄 PDF gerado.",
+      message: "Segue seu arquivo PDF gerado.",
       fileUrl,
       fileName,
     };
@@ -56,7 +56,7 @@ export const analyzeData = async (userQuestion: string) => {
 
     return {
       type: "excel",
-      message: "📘 Excel gerado.",
+      message: "Segue seu arquivo Excel gerado.",
       fileUrl,
       fileName,
     };
