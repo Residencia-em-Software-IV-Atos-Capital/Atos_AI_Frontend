@@ -28,6 +28,15 @@ export const analyzeData = async (userQuestion: string) => {
 
   const contentType = response.headers["content-type"] || "";
 
+  if (contentType.includes("application/json")) {
+    const decoder = new TextDecoder("utf-8");
+    const jsonString = decoder.decode(response.data);
+
+    const json = JSON.parse(jsonString);
+
+    return json;
+  }
+
   // --- PDF ---
   if (contentType.includes("application/pdf")) {
     const blob = new Blob([response.data], { type: "application/pdf" });
@@ -79,7 +88,6 @@ export const analyzeData = async (userQuestion: string) => {
       fileName,
     };
   }
-
 };
 
 
