@@ -1,5 +1,4 @@
 [phases.setup]
-# desativa rollup nativo, que quebra o build
 env.ROLLUP_SKIP_NODE_NATIVE = "true"
 
 [phases.install]
@@ -9,4 +8,4 @@ cmds = ["bun install"]
 cmds = ["bun run build"]
 
 [start]
-cmd = "bun run preview"
+cmd = "bunx serve ./dist --single"
