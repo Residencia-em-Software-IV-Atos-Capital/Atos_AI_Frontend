@@ -1,10 +1,12 @@
-[phases.build]
-# desativa o rollup nativo, que quebra no docker/nix
-env = {
-  ROLLUP_SKIP_NODE_NATIVE = "true"
-}
+[phases.setup]
+# desativa rollup nativo, que quebra o build
+env.ROLLUP_SKIP_NODE_NATIVE = "true"
 
-cmds = [
-  "bun install",
-  "bun run build"
-]
+[phases.install]
+cmds = ["bun install"]
+
+[phases.build]
+cmds = ["bun run build"]
+
+[start]
+cmd = "bun run preview"
