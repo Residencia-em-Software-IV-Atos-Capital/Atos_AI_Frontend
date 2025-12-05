@@ -24,7 +24,7 @@ export function Sidebar({ onNewChat }: SidebarProps) {
     // Esta é a nova div que engloba tudo
     <div className="w-72 h-screen bg-gradient-sidebar flex flex-col shadow-medium">
       {/* Logo */}
-      <div className="p-6 border-b border-sidebar-border-custom">
+      <div className="p-6 border-sidebar-border-custom">
         <img src={logo} alt="ATOS Capital Logo" width={150} />
       </div>
 
@@ -32,7 +32,7 @@ export function Sidebar({ onNewChat }: SidebarProps) {
       <div className="p-4">
         <Button
           onClick={onNewChat}
-          className="w-full justify-start gap-3 bg-transparent border border-sidebar-accent-custom text-sidebar-text hover:bg-sidebar-hover transition-all duration-200"
+          className="w-full justify-start gap-3 bg-transparent border-sidebar-accent-custom text-sidebar-text hover:bg-sidebar-hover transition-all duration-200"
           variant="outline"
         >
           <PlusIcon className="h-4 w-4" />
@@ -61,7 +61,7 @@ export function Sidebar({ onNewChat }: SidebarProps) {
       </div>
 
       {/* Botão de tema */}
-      <div className="p-4 border-t border-sidebar-border-custom">
+      <div className="p-4 border-sidebar-border-custom">
         <Button
           onClick={toggleTheme}
           className="w-full justify-start gap-3 bg-transparent text-sidebar-text hover:bg-sidebar-hover transition-all duration-200"

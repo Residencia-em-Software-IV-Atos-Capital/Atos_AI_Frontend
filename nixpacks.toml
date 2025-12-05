@@ -1,0 +1,11 @@
+[phases.setup]
+env.ROLLUP_SKIP_NODE_NATIVE = "true"
+
+[phases.install]
+cmds = ["bun install"]
+
+[phases.build]
+cmds = ["bun run build"]
+
+[start]
+cmd = "bunx serve ./dist --single"

@@ -20,20 +20,21 @@ const Login = () => {
     };
 
     const handleSubmit = (e) => {
-        // Implementar aqui a requisicao de login
         e.preventDefault();
 
-        try {
-            console.log(formData);
+        const fixedUser = "admin";
+        const fixedPass = "123456";
+
+        if (formData.username === fixedUser && formData.password === fixedPass) {
             navigate("/");
-        } catch (error) {
-            console.error(error);
+        } else {
+            alert("Usuário ou senha incorretos!");
         }
-    }
+    };
 
     const handleShowPassword = () => {
         setShowPassword((prevState) => !prevState);
-    }
+    };
 
     return (
         <div className="login-container">
@@ -59,8 +60,11 @@ const Login = () => {
                             placeholder="Senha"
                             onChange={handleChange}
                         />
-                        {showPassword ? <EyeIcon onClick={handleShowPassword} style={{ cursor: 'pointer'}}/> : 
-                                        <EyeClosed onClick={handleShowPassword} style={{ cursor: 'pointer'}} />}
+                        {showPassword ? 
+                            <EyeIcon onClick={handleShowPassword} style={{ cursor: 'pointer'}}/> 
+                            : 
+                            <EyeClosed onClick={handleShowPassword} style={{ cursor: 'pointer'}} />
+                        }
                     </div>
                     <button className="btn-login" type="submit">Entrar</button>
                 </form>
