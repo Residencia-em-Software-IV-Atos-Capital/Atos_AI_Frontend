@@ -1,15 +1,31 @@
-import { ChartBar } from "../chartbar/chatbar";
+import React, { useEffect, useState } from "react";
+import { getAvailableYears } from "@/services/yearsService";
 import Header from "../header/index";
-import ChartDonut from "../ChartDonut/chartdonut";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, Users, Shield } from "lucide-react";
+import ClientCaptureCard from "../ChartDonut/chartHome";
+import SalesOverviewCard from "../ChartDonut/chart";
 
 export function Dashboard() {
+  const [years, setYears] = React.useState<string[]>([]);
+  const fetchYears = async () => {
+  try {
+    const yearList = await getAvailableYears(); 
+
+    setYears(yearList);
+    console.log("Anos disponíveis:", yearList);
+  } catch (error) {
+    setYears([]);
+  }
+};
+useEffect(() => {
+  fetchYears();
+}, []);
+
   return (
     <div className="p-8 min-h-full bg-gradient-to-br from-background to-muted/20 dark:from-background dark:to-muted/10">
       <Header />
@@ -95,68 +111,8 @@ export function Dashboard() {
       {/* Gráficos - Centralizados */}
       <div className="flex justify-center mb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl w-full">
-          <Card className="shadow-md hover:shadow-lg transition-shadow dark:shadow-md dark:hover:shadow-lg border-border">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-              <div>
-                <CardTitle className="text-xl font-bold text-foreground">
-                  Visão Geral
-                </CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">Últimos 12 meses</p>
-              </div>
-              <div className="w-32">
-                <Select defaultValue="2024">
-                  <SelectTrigger className="h-9">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="2024">2024</SelectItem>
-                    <SelectItem value="2023">2023</SelectItem>
-                    <SelectItem value="2022">2022</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-2">
-              <ChartBar />
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-md hover:shadow-lg transition-shadow dark:shadow-md dark:hover:shadow-lg border-border">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-xl font-bold text-foreground">
-                Captação de Clientes
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">Distribuição atual</p>
-            </CardHeader>
-            <CardContent className="pt-2">
-              <div className="flex flex-col items-center">
-                <ChartDonut />
-                <div className="mt-6 grid grid-cols-3 gap-4 w-full text-center">
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 bg-red-600 dark:bg-red-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-foreground">60%</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground">Clientes</span>
-                  </div>
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-foreground">40%</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground">Não Clientes</span>
-                  </div>
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-                      <span className="text-sm font-medium text-foreground">20%</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground">Sem Resposta</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <SalesOverviewCard />
+          <ClientCaptureCard />
         </div>
       </div>
 
